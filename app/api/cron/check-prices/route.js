@@ -1,33 +1,31 @@
-import { sendPriceDropAlert } from "@/lib/email";
 import { NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
+import { scrapeProduct } from "@/lib/firecrawl";
+import { sendPriceDropAlert } from "@/lib/email";
 
-export async function GET(){
-    return NextResponse.json({
-        message:"Price check endpoint is working.Use POST to trigger."
-    })
-}
+export async function POST(request) {
+  try {
+    const authHeader = request.headers.get("authorization");
+    const cronSecret = process.env.CRON_SECRET;
 
-export async function POST(request){
-    try {
-        const authHeader = request.headers.get("authorization");
-        const cronSecret = process.env.CRON_SECRET
+    if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
-        if(!cronSecret || authHeader !== `Bearer ${cronSecret}`){
-            return NextResponse.json({error:"Unauthorized"},{status:401}) 
-        }
-         // Use service role to bypass RLS
+    // Use service role to bypass RLS
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL,
       process.env.SUPABASE_SERVICE_ROLE_KEY
     );
-      const { data: products, error: productsError } = await supabase
+
+    const { data: products, error: productsError } = await supabase
       .from("products")
       .select("*");
 
-      if(productsError) throw productsError;
-      console.log(`Found ${products.length} products to check`)
+    if (productsError) throw productsError;
 
-     
+    console.log(`Found ${products.length} products to check`);
+
     const results = {
       total: products.length,
       updated: 0,
@@ -36,7 +34,7 @@ export async function POST(request){
       alertsSent: 0,
     };
 
-       for (const product of products) {
+    for (const product of products) {
       try {
         const productData = await scrapeProduct(product.url);
 
@@ -44,7 +42,7 @@ export async function POST(request){
           results.failed++;
           continue;
         }
-        
+
         const newPrice = parseFloat(productData.currentPrice);
         const oldPrice = parseFloat(product.current_price);
 
