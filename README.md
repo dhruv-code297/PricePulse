@@ -1,36 +1,117 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🚀 PricePulse – Smart Price Tracker
 
-## Getting Started
+**PricePulse** is a modern web app that tracks product prices from **any e-commerce website**, stores price history, and sends **instant email alerts** when prices drop. Built with a cyber-modern UI and real automation pipeline.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## ✨ Features
+
+* 🔍 **Universal Tracking** – Works with Amazon, Flipkart, Walmart, and any store
+* 📉 **Price History Graphs** – Visual trends using Recharts
+* ⚡ **Automated Scraping** – Powered by Firecrawl
+* 🔔 **Email Alerts** – Price drop notifications via Resend
+* 🔐 **Google OAuth** – Secure authentication
+* 🧠 **Cron Automation** – Background price checks
+* 🎨 **Cyberpunk UI** – Built with ShadCN + Tailwind
+* 🌗 **Dark/Light Mode**
+* 🗄 **Supabase Backend** – RLS + Service Role
+* 📱 Fully responsive & modern UX
+
+---
+
+## 🛠 Tech Stack
+
+**Frontend**
+
+* Next.js (App Router)
+* React
+* Tailwind CSS
+* ShadCN UI
+* Recharts
+* Lucide Icons
+
+**Backend & Services**
+
+* Supabase (Auth + Database + RLS)
+* Firecrawl – Web scraping
+* Resend – Email service
+* Google OAuth
+* Vercel 
+
+---
+
+## ⚙ How It Works
+
+1. User signs in via Google
+2. Pastes any product URL
+3. Firecrawl extracts price & details
+4. Stored in Supabase
+5. Cron job checks prices daily
+6. On price drop → Resend sends email
+7. User views history in charts
+
+---
+
+## 🚦 Environment Variables
+
+Create `.env.local`:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+
+CRON_SECRET=
+
+RESEND_API_KEY=
+
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## 🧪 Run Locally
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+git clone <repo-url>
+cd pricepulse
+npm install
+npm run dev
+```
 
-## Learn More
+Open → [http://localhost:3000](http://localhost:3000)
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📬 Cron Endpoint
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Secure endpoint:
+
+```
+POST /api/cron/check-prices
+Authorization: Bearer CRON_SECRET
+```
+
+* Scrapes all products
+* Updates DB
+* Inserts price history
+* Sends alerts
+
+---
+
+
+
+## 👨‍💻 Author
+
+**Dhruv**
+
+Built with ❤️ and lots of debugging.
+
+---
+
+
