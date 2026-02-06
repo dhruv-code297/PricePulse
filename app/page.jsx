@@ -72,7 +72,7 @@ export default async function Home() {
   <div className="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
 
     {/* LOGO + BETA */}
-    <div className="flex items-center">
+    <div className="-mx-13 flex items-center">
 
       {/* LOGO BOX – negative margin removes PNG empty padding */}
       <div className="h-12 w-[240px] relative -mr-14">
